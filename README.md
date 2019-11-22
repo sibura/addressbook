@@ -10,5 +10,5 @@ To view the assessment , clone the repo and install the dependencies:
 $ git clone https://github.com/sibura/addressbook.git  
 $ cd addressbook
 $ npm install
-$ node app.js / nodemon app.js
+run : $ node app.js / nodemon app.js
 ```
