@@ -1,0 +1,184 @@
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>CRUD Node.js and Mysql</title>
+	<link href="/css/styles.css" rel="stylesheet" type="text/css"/>
+	<link rel="stylesheet" type="text/css" href="/css/bootstrap.css"/>
+	<script src="/js/main.js"></script>
+</head>
+<body>
+	<div class="container">
+		<h2>Contact List</h2>
+		<div class="Search">
+			<input type="text" ng-model="test" value="" class="form-control" id="search" placeholder="searching">
+		</div>
+		<button class="btn btn-success" data-toggle="modal" data-target="#myModalAdd">Add New</button>
+
+		<table class="table table-striped" id="mytable">
+			<thead>
+				<tr>
+					<th></th>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>Contact Number</th>
+					<th>Email</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				{{#each results}}
+				<tr>
+					<td>{{ contacts_id }}</td>
+					<td>{{ first_name }}</td>
+					<td>{{ last_name }}</td>
+					<td>{{ contact_number }}</td>
+					<td>{{ email_address }}</td>
+					<td>
+						<a href="javascript:void(0);" class="btn btn-sm btn-info edit" data-id="{{ contacts_id }}" data-first_name="{{ first_name }}" data-last_name="{{ last_name }}"  data-contact_number="{{ contact_number }}"   data-email_address="{{ email_address }}">Edit</a>
+						<a href="javascript:void(0);" class="btn btn-sm btn-danger delete" data-id="{{ contacts_id }}">Delete</a>
+					</td>
+				</tr>
+				{{/each}}
+			</tbody>
+		</table>
+	</div>
+
+	<!-- Add New Contacts Modal-->
+
+	<form action="/save" method="post">
+
+		<div class="modal fade" id="myModalAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Add New Contact</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+
+					<div class="modal-body">
+						<div class="form-group">
+							<input type="text" name="first_name" class="form-control" placeholder="First Name" required>
+						</div>
+
+						<div class="form-group">
+							<input type="text" name="last_name" class="form-control" placeholder="Last Name" required>
+						</div>
+
+						<div class="form-group">
+							<input type="text" name="contact_number" class="form-control" placeholder="Contact Number" required>
+						</div>
+
+						<div class="form-group">
+							<input type="text" name="email_address" class="form-control" placeholder="Email address" required>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						<button type="submit" class="btn btn-primary">Save</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+
+	<!-- Edit Contacts Modal-->
+	<form action="/update" method="post">
+		<div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Edit Contact</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="form-group">
+							<input type="text" name="first_name" class="form-control first_name" placeholder="First Name" required>
+						</div>
+
+						<div class="form-group">
+							<input type="text" name="last_name" class="form-control first_name" placeholder="Last Name" required>
+						</div>
+
+						<div class="form-group">
+							<input type="text" name="contact_number" class="form-control contact_number" placeholder="Contact" required>
+						</div>
+
+						<div class="form-group">
+							<input type="text" name="email_address" class="form-control email_address" placeholder="Email address" required>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<input type="hidden" name="id" class="contacts_id">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						<button type="submit" class="btn btn-primary">Update</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+
+	<!-- Delete Contacts Modal-->
+	<form id="add-row-form" action="/delete" method="post">
+		<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="myModalLabel">Delete Contact</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					</div>
+					<div class="modal-body">
+						<strong>Are You Sure To Delete This Data?</strong>
+					</div>
+					<div class="modal-footer">
+						<input type="hidden" name="contacts_id" class="form-control contacts_id2" required>
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="submit" class="btn btn-success">Delete</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+
+	<script src="/js/jquery-3.3.1.js"></script>
+	<script src="/js/bootstrap.js"></script>
+	<script>
+	$(document).ready(function(){
+		//showing data to modal for edit record
+		$('#mytable').on('click','.edit',function(){
+			var contacts_id = $(this).data('id');
+			var first_name = $(this).data('first_name');
+			var last_name = $(this).data('last_name');
+			var contact_number = $(this).data('contact_number');
+			var email_address = $(this).data('email_address');
+			$('#EditModal').modal('show');
+			$('.first_name').val(first_name);
+			$('.last_name').val(last_name);
+			$('.contact_number').val(contact_number);
+			$('.email_address').val(email_address);
+			$('.contacts_id').val(contacts_id);
+		});
+		//showing modal for delete record
+		$('#mytable').on('click','.delete',function(){
+			var contacts_id = $(this).data('id');
+			$('#DeleteModal').modal('show');
+			$('.contacts_id2').val(contacts_id);
+		});
+
+		//Search functionality
+		$("#search").keyup(function() {
+			var value = this.value;
+			$("#mytable").find("tr").each(function(index) {
+				if (!index) return;
+				var id = $(this).find("td").text();
+				$(this).toggle(id.indexOf(value) !== -1);
+			});
+		});
+
+	});
+	</script>
+</body>
+</html>
