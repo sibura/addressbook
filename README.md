@@ -12,3 +12,5 @@ $ cd addressbook
 $ npm install
 run : $ node app.js / nodemon app.js
 ```
+![GitHub Logo](/images/logo.png)
+Format: ![Alt Text](url)
